@@ -17,7 +17,7 @@ module.exports = {
   },
   plugins: [
     new HTMLWebpackPlugin({
-      title: 'WorldCheck Positions Trainer | TRLabs',
+      title: 'November Project - Mondays',
       hash: true
     })
   ],

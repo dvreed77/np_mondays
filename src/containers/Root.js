@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import {Provider} from 'react-redux'
 // import routes from '../routes'
 import { Route } from 'react-router'
-import Home from '../containers/Home2'
+import Home from '../containers/Home3'
 import { ConnectedRouter, routerReducer, routerMiddleware, push } from 'react-router-redux'
 
 export default class Root extends Component {

@@ -62,6 +62,8 @@ class Home extends Component {
         <ReactMapboxGl
           style='mapbox://styles/dvreed77/cir1ar1fk000lbunsz4rsjc3f'
           accessToken='pk.eyJ1IjoiZHZyZWVkNzciLCJhIjoibVMzYlVGdyJ9.dYzBhVYkCw1GRZwDxlCsng'
+          center={[-71.0589, 42.3601]}
+          zoom={[14]}
           containerStyle={{
             height: "100vh",
             width: "100vw"
@@ -70,7 +72,17 @@ class Home extends Component {
             type="symbol"
             id="marker"
             layout={{ "icon-image": "marker-15" }}>
-            <Feature coordinates={[-0.481747846041145, 51.3233379650232]}/>
+            <Feature coordinates={[-71.0589, 42.3601]}/>
+          </Layer>
+
+          <Layer
+            type="symbol"
+            id="marker2"
+            layout={{ "icon-image": "marker-15" }}>
+            <Feature
+              key='2'
+
+              coordinates={[-0.481747846041145, 51.3233379650232]}/>
           </Layer>
         </ReactMapboxGl>
       </div>
