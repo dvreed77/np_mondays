@@ -4,6 +4,7 @@ import './App.css';
 // import MapGL from 'react-map-gl';
 import MapGL, {Marker, Popup, NavigationControl} from 'react-map-gl';
 import NPPin from './np-pin';
+import NPInfo from './np-info';
 
 const token = process.env.REACT_APP_MapboxAccessToken;
 
@@ -37,6 +38,7 @@ class Dave extends Component {
         super(props);
         this.state = {
             year: 2015,
+            popupInfo: null,
             npLocs: [],
             viewport: {
                 latitude: 42.3601,
@@ -68,38 +70,28 @@ class Dave extends Component {
     };
 
 
-    // updatePercentiles(data, f => f.properties.income[this.state.year]);
+    _renderPopup() {
+        const {popupInfo} = this.state;
 
-    // const mapStyle = defaultMapStyle
-    //     .setIn(['sources', 'incomeByState'], {type: 'geojson', data});
-    // Add point layer to map
-    // .set('layers', defaultMapStyle.get('layers').push(dataLayer));
+        return popupInfo && (
+            <Popup tipSize={5}
+                   anchor="top"
+                   longitude={popupInfo.lng}
+                   latitude={popupInfo.lat}
+                   onClose={() => this.setState({popupInfo: null})} >
+                <div>
+                    <NPInfo info={popupInfo} />
+                </div>
+            </Popup>
+        );
+    }
 
-    // this.setState({data});
-    // };
-
-    // _renderPopup() {
-    //     const {popupInfo} = this.state;
-    //
-    //     return popupInfo && (
-    //         <Popup tipSize={5}
-    //                anchor="top"
-    //                longitude={popupInfo.longitude}
-    //                latitude={popupInfo.latitude}
-    //                onClose={() => this.setState({popupInfo: null})} >
-    //             <div>
-    //                 Dave
-    //             </div>
-    //         </Popup>
-    //     );
-    // }
-
-    _renderCityMarker = (city, index) => {
+    _renderCityMarker = (loc, index) => {
         return (
             <Marker key={`marker-${index}`}
-                    longitude={city.lng}
-                    latitude={city.lat}>
-                <NPPin size={20} onClick={() => this.setState({popupInfo: city})}/>
+                    longitude={loc.lng}
+                    latitude={loc.lat}>
+                <NPPin size={20} onClick={() => this.setState({popupInfo: loc})}/>
             </Marker>
         );
     }
@@ -110,8 +102,6 @@ class Dave extends Component {
 
         const CITIES = npLocs
 
-        console.log('LOCS', npLocs)
-
         return (
             <MapGL
                 {...viewport}
@@ -121,6 +111,8 @@ class Dave extends Component {
                 mapboxApiAccessToken={token}>
 
                 {CITIES.map(this._renderCityMarker)}
+
+                {this._renderPopup()}
 
             </MapGL>
         );
