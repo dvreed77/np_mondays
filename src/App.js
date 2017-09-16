@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import './App.css';
 
 // import MapGL from 'react-map-gl';
@@ -8,7 +8,6 @@ import NPPin from './np-pin';
 const token = process.env.REACT_APP_MapboxAccessToken;
 
 console.log(process.env);
-
 
 
 const d = {
@@ -32,15 +31,13 @@ const d = {
 }
 
 
-
 class Dave extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             year: 2015,
-            data: null,
-            hoveredFeature: null,
+            npLocs: [],
             viewport: {
                 latitude: 42.3601,
                 longitude: -71.0589,
@@ -54,31 +51,32 @@ class Dave extends Component {
     }
 
     componentDidMount() {
-        // this._loadData();
+        this._loadData();
     }
 
     _loadData = () => {
-
-        const data = {
-            "type": "FeatureCollection",
-            "features": [
-                {
-                    "type": "Feature",
-                    "properties": {"name": "Maine"},
-                    "geometry": {"type": "Point", "coordinates": [42.3601, -71.0589]}
-                }]
+        fetch('/locations.json')
+            .then(d => {
+                return d.json();
+            })
+            .then(d=>{
+                console.log(d)
+                this.setState({
+                    npLocs: d
+                })
+            })
     };
 
 
-        // updatePercentiles(data, f => f.properties.income[this.state.year]);
+    // updatePercentiles(data, f => f.properties.income[this.state.year]);
 
-        // const mapStyle = defaultMapStyle
-        //     .setIn(['sources', 'incomeByState'], {type: 'geojson', data});
-            // Add point layer to map
-            // .set('layers', defaultMapStyle.get('layers').push(dataLayer));
+    // const mapStyle = defaultMapStyle
+    //     .setIn(['sources', 'incomeByState'], {type: 'geojson', data});
+    // Add point layer to map
+    // .set('layers', defaultMapStyle.get('layers').push(dataLayer));
 
-        this.setState({data});
-    };
+    // this.setState({data});
+    // };
 
     // _renderPopup() {
     //     const {popupInfo} = this.state;
@@ -99,20 +97,20 @@ class Dave extends Component {
     _renderCityMarker = (city, index) => {
         return (
             <Marker key={`marker-${index}`}
-                    longitude={city.longitude}
-                    latitude={city.latitude} >
-                <NPPin size={20} onClick={() => this.setState({popupInfo: city})} />
+                    longitude={city.lng}
+                    latitude={city.lat}>
+                <NPPin size={20} onClick={() => this.setState({popupInfo: city})}/>
             </Marker>
         );
     }
 
     render() {
 
-        const {viewport} = this.state;
+        const {viewport, npLocs} = this.state;
 
-        const CITIES = [
-            {latitude:42.3601, longitude:-71.0589}
-        ];
+        const CITIES = npLocs
+
+        console.log('LOCS', npLocs)
 
         return (
             <MapGL
@@ -120,9 +118,9 @@ class Dave extends Component {
                 mapStyle="mapbox://styles/dvreed77/cir1ar1fk000lbunsz4rsjc3f"
                 onViewportChange={v => this.setState({viewport: v})}
                 preventStyleDiffing={false}
-                mapboxApiAccessToken={token} >
+                mapboxApiAccessToken={token}>
 
-                { CITIES.map(this._renderCityMarker) }
+                {CITIES.map(this._renderCityMarker)}
 
             </MapGL>
         );
@@ -132,14 +130,14 @@ class Dave extends Component {
 
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App2">
-          <Dave />
+    render() {
+        return (
+            <div className="App2">
+                <Dave/>
 
-      </div>
-    );
-  }
+            </div>
+        );
+    }
 }
 
 export default App;
